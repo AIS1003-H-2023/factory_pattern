@@ -1,6 +1,6 @@
 # Factory pattern demo
 
-Modified example from class 13/11 showcasing the factory pattern and otherwise som CMake configuration.
+Modified example from class 13/11 showcasing the factory pattern and otherwise some CMake configuration.
 
 
 ### Building
