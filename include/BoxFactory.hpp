@@ -10,7 +10,7 @@
 class BoxFactory: public MeshFactory {
 
 public:
-    explicit BoxFactory(float size, const std::shared_ptr<threepp::Material>& material)
+     BoxFactory(float size, const std::shared_ptr<threepp::Material>& material)
         : material_(material), geometry_(threepp::BoxGeometry::create(size, size, size)) {}
 
     std::shared_ptr<threepp::Mesh> create() override {
