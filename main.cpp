@@ -1,10 +1,11 @@
 
+#include "threepp/extras/imgui/ImguiContext.hpp"
 #include "threepp/threepp.hpp"
 
 #include "BoxFactory.hpp"
+#include "CustomSineCurve.hpp"
 #include "ObjectSpawner.hpp"
 #include "SphereFactory.hpp"
-#include "CustomSineCurve.hpp"
 
 using namespace threepp;
 
@@ -25,7 +26,7 @@ namespace {
 
 int main() {
 
-    Canvas canvas("threepp demo", {{"aa", 4}});
+    Canvas canvas("Factory pattern demo", {{"aa", 4}});
     GLRenderer renderer(canvas.size());
     renderer.setClearColor(Color::aliceblue);
 
@@ -47,8 +48,22 @@ int main() {
     factories.emplace_back(std::make_unique<BoxFactory>(0.5f, boxMaterial));
 
     ObjectSpawner spawner(*factories.back());
-    spawner.setLifetime(0.5f);
     scene->add(spawner);
+
+    float lifeTime = 0.5f;
+    spawner.setLifetime(lifeTime);
+    ImguiFunctionalContext ui(canvas.windowPtr(), [&] {
+        ImGui::SetNextWindowPos({0, 0}, 0, {0, 0});
+        ImGui::SetNextWindowSize({230, 0}, 0);
+
+        ImGui::Begin("ObjectSpawner");
+        if (ImGui::SliderFloat("lifetime", &lifeTime, 0.1f, 1.f)) {
+            spawner.setLifetime(lifeTime);
+        }
+
+        controls.enabled = !ImGui::IsWindowHovered();
+        ImGui::End();
+    });
 
     canvas.onWindowResize([&](WindowSize size) {
         camera->aspect = size.aspect();
@@ -65,12 +80,13 @@ int main() {
             auto& mesh = spawner.spawn(time);
             curve.getPoint(time, mesh.position);
         }
-        if (it % 10 == 0) { // possibly change factory every 10th iteration
-            auto index = math::randInt(0, static_cast<int>(factories.size())-1);
+        if (it % 10 == 0) {// possibly change factory every 10th iteration
+            auto index = math::randInt(0, static_cast<int>(factories.size()) - 1);
             spawner.setFactory(*factories.at(index));
         }
-        spawner.update(time); // removes objects based on elapsed time
+        spawner.update(time);// removes objects based on elapsed time
 
         renderer.render(*scene, *camera);
+        ui.render();
     });
 }

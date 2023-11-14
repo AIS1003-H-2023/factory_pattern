@@ -17,6 +17,8 @@ public:
 
     void setLifetime(float lifetime);
 
+    [[nodiscard]] float getLifeTime() const;
+
     void update(float t);
 
 private:

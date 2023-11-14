@@ -20,6 +20,10 @@ void ObjectSpawner::setLifetime(float lifetime) {
     lifetime_ = lifetime;
 }
 
+float ObjectSpawner::getLifeTime() const {
+    return lifetime_;
+}
+
 void ObjectSpawner::update(float t) {
 
     for (auto it = spawnedObjects_.begin(); it != spawnedObjects_.end();) {
