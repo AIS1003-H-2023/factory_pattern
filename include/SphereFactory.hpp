@@ -10,7 +10,7 @@
 class SphereFactory: public MeshFactory {
 
 public:
-    explicit SphereFactory(float radius, const std::shared_ptr<threepp::Material>& material)
+    SphereFactory(float radius, const std::shared_ptr<threepp::Material>& material)
         : material_(material), geometry_(threepp::SphereGeometry::create(radius)) {}
 
     std::shared_ptr<threepp::Mesh> create() override {
